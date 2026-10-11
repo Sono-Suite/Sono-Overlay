@@ -430,6 +430,7 @@ func origMain(isOptionSpecified bool) {
 		sb.WriteString("\n'ptlv-': Potato Leaves (ptlv.milkbun.org)")
 		sb.WriteString("\n'UnCh-': UntitledCharts (untitledcharts.com)")
 		sb.WriteString("\n'sync-': Local Server (ScoreSync + ScoreSync Modern)")
+		sb.WriteString("\n'nex-': Nexint's Sonolus Server")
 		sb.WriteString("\n'local-': Local Server (Sono-Utils) - Append the \"local-\" tag to the existing chart ID")
 		sb.WriteString("\n'coconut-next-sekai-': Next SEKAI (coconut.sonolus.com/next-sekai)")
 		sb.WriteString("\n'coconut-horizon-': Sonolus Horizon (coconut.sonolus.com/horizon) <-- Original Sonolus Rhythm Game")
@@ -571,6 +572,7 @@ func origMain(isOptionSpecified bool) {
 		} else {
 			chartSource, err = sonooverlay.DetectChartSource(chartId, chartInstance)
 			chartId = strings.TrimPrefix(chartId, "local-")
+			chartId = strings.TrimPrefix(chartId, "nex-")
 			if err != nil {
 				fmt.Println(color.RedString("FAIL: 譜面が見つかりません。接頭辞も込め、正しい譜面IDを入力して下さい。\nChart not found. Please enter the correct chart ID including the prefix."))
 				return
@@ -603,6 +605,7 @@ func origMain(isOptionSpecified bool) {
 		chartUNv1def, _ = sonooverlay.FetchChart(chartSource, chartId+"?levelbg=default_or_v1")
 
 		if chart.Engine.Version != 13 {
+			fmt.Println(chart)
 			fmt.Println(color.RedString(fmt.Sprintf("\nFAIL (ver.%d): エンジンのバージョンが古い。Sono-Overlayを最新版に更新してください。\nUnsupported engine version. Please update Sono-Overlay to latest version.", chart.Engine.Version)))
 			return
 		}

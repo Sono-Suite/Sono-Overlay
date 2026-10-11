@@ -96,6 +96,7 @@ func FetchChart(source Source, chartId string) (sonolus.LevelInfo, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
+		fmt.Printf("%s", url)
 		if source.Id == "local_server" {
 			return sonolus.LevelInfo{}, errors.New("指定されたタイトルの譜面が見つかりませんでした。(Chart not found.)")
 		}
@@ -220,6 +221,14 @@ func DetectChartSource(chartId string, chartInstance string) (Source, error) {
 			Color:  0x5b5c7c,
 			Host:   "coconut.sonolus.com/next-sekai",
 			Status: 0,
+		}
+	} else if strings.HasPrefix(chartId, "nex-") {
+		source = Source{
+			Id:     "nex",
+			Name:   "Nexint Server",
+			Color:  0x5b5c7c,
+			Host:   "sono.nexint.ca",
+			Status: 2,
 		}
 	} else if strings.HasPrefix(chartId, "lalo-") {
 		source = Source{
@@ -451,7 +460,7 @@ func CopyFile(src, dst string) error {
 }
 
 func DownloadBackground(source Source, level sonolus.LevelInfo, destPath string, chartId string, arg string, customBG bool) error {
-	if source.Id == "local_json" || source.Id == "sekai_best" || source.Id == "sbuga" || source.Name == "Chart Cyanvas Archive" || source.Id == "potato_leaves" || source.Id == "local_server" || source.Id == "next_sekai" || source.Id == "horizon" || (source.Id == "skyra" && !customBG) {
+	if source.Id == "local_json" || source.Id == "nex" || source.Id == "sekai_best" || source.Id == "sbuga" || source.Name == "Chart Cyanvas Archive" || source.Id == "potato_leaves" || source.Id == "local_server" || source.Id == "next_sekai" || source.Id == "horizon" || (source.Id == "skyra" && !customBG) {
 		coverPath := path.Join(destPath, "cover.png")
 		if _, err := os.Stat(coverPath); os.IsNotExist(err) {
 			return fmt.Errorf("ジャケット画像が見つかりません。先にジャケット画像をダウンロードしてください。(Jacket image not found. Download jacket image first.)")
